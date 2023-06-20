@@ -53,16 +53,18 @@ For i = 2 To LastRow
         
         'Assign Outputs
         'perform calculations
-        yearlychange = (mar_close - mar_open)
-        percentchange = yearlychange / mar_open
+        Yearlychange = (mar_close - mar_open)
+        percentchange = Yearlychange / mar_open
         ws.Range("I" & y).Value = ticker
-        ws.Range("J" & y).Value = yearlychange
+        ws.Range("J" & y).Value = Yearlychange
             If ws.Range("J" & y).Value > 0 Then
             ws.Range("J" & y).Interior.ColorIndex = 4
             ElseIf ws.Range("J" & y).Value < 0 Then
             ws.Range("J" & y).Interior.ColorIndex = 3
             End If
-        'Formatting percent change and total stock volume for readability
+        'Formatting new columns for readability
+        ws.Range("J" & y).Value = Yearlychange
+        ws.Range("J" & y).NumberFormat = "$0.00"
         ws.Range("K" & y).Value = percentchange
         ws.Range("K" & y).NumberFormat = "0.00%"
         ws.Range("L" & y).Value = totalvolume
@@ -83,12 +85,11 @@ Next i
 
 
 
-'Perform basic analysis on compiled data and print
+
 maxvolume = WorksheetFunction.Max(ws.Range("L2:L" & LastRow).Value)
 maxvolticker = 1 + WorksheetFunction.Match(maxvolume, (ws.Range("L2:L" & LastRow).Value), 0)
 ws.Range("q4").Value = maxvolume
 ws.Range("P4") = ws.Cells(maxvolticker, 9)
-ws.Range("Q4").NumberFormat = "#,##0"
 
 maxpercent = WorksheetFunction.Max(ws.Range("K2:K" & LastRow).Value)
 maxpercentticker = 1 + WorksheetFunction.Match(maxpercent, (ws.Range("K2:K" & LastRow).Value), 0)
@@ -105,5 +106,11 @@ ws.Range("P3") = ws.Cells(minpercentticker, 9)
 Next ws
 
 
+
+End Sub
+
+Sub clear_contents():
+
+Range("K2:N2").ClearContents
 
 End Sub
